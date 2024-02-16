@@ -1,15 +1,11 @@
-// En pinVars.groovy
-
 def call() {
     def pinVars = [:]
 
-    pinVars.buildDockerImage = { imageName, version,  ->
-        echo "Directorio actual: ${pwd()}"
-        dir(directory) {
-            sh '''
+    pinVars.buildDockerImage = { imageName, version ->
+        sh '''
                 ls -la
+                docker build -t $imageName:$version .
             '''
-        }
     }
 
     pinVars.pushDockerImage = { imageName, version, directory ->
@@ -18,13 +14,12 @@ def call() {
         """
     }
 
-        pinVars.dockerHubLogin = { username, password ->
+    pinVars.dockerHubLogin = { username, password ->
         def dockerLoginCommand = """
             docker login -u ${username} -p ${password}
         """
         sh dockerLoginCommand
     }
-
 
     return pinVars
 }
