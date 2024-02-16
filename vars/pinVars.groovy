@@ -14,11 +14,13 @@ def call() {
         """
     }
 
-    pinVars.dockerHubLogin = { username, password ->
-        def dockerLoginCommand = """
-            docker login -u ${username} -p ${password}
-        """
-        sh dockerLoginCommand
+   pinVars.dockerLogin = { registryUrl ->
+        withCredentials([usernamePassword(credentialsId: 'dockerHub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+            withDockerRegistry([url: registryUrl]) {
+                return true
+            }
+        }
+        return false
     }
 
     return pinVars
