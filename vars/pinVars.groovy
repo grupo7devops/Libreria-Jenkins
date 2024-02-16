@@ -1,21 +1,23 @@
+// pinVars.groovy
+
 def call() {
     def pinVars = [:]
 
-   
-
-    pinVars.pushDockerImage = {  ->
-        sh """
-            docker push grupo7devops/pin1app:1.0.0
-        """
-    }
-
-    pinVars.dockerLogin = { registryUrl ->
-        withCredentials([usernamePassword(credentialsId: 'dockerHub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+    pinVars.dockerLogin = { registryUrl, credentialsId ->
+        withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
             withDockerRegistry([url: registryUrl]) {
                 return true
             }
         }
         return false
+    }
+
+    pinVars.buildDockerImage = { imageName ->
+        sh "docker build -t ${imageName} ."
+    }
+
+    pinVars.pushDockerImage = { imageName ->
+        sh "docker push ${imageName}"
     }
 
     return pinVars
