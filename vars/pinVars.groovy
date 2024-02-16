@@ -3,7 +3,7 @@
 def call() {
     def pinVars = [:]
 
-    pinVars.buildDockerImage = { imageName, version, directory ->
+    pinVars.buildDockerImage = { imageName, version,  ->
         echo "Directorio actual: ${pwd()}"
         dir(directory) {
             sh '''
