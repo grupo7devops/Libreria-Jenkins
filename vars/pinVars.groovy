@@ -14,5 +14,14 @@ def call() {
         """
     }
 
+    pinVars.dockerLogin = { registryUrl ->
+        withCredentials([usernamePassword(credentialsId: 'dockerHub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+            withDockerRegistry([url: registryUrl]) {
+                return true
+            }
+        }
+        return false
+    }
+
     return pinVars
 }
