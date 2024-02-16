@@ -3,9 +3,9 @@ def call() {
 
    
 
-    pinVars.pushDockerImage = { imageName, version, directory ->
+    pinVars.pushDockerImage = {  ->
         sh """
-            docker push $imageName:$version
+            docker push grupo7devops/pin1app:1.0.0
         """
     }
 
